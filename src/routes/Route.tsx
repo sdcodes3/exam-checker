@@ -7,6 +7,7 @@ const AppRoutes: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="*" element={<>Page not found !!</>} />
       </Routes>
     </Router>
   );
