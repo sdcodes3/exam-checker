@@ -60,7 +60,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
       | "diagonal-line"
       | "rectangle"
       | null;
-    symbol: JSX.Element;
+    symbol: any;
   }[] = [
     {
       id: "checkmark",
