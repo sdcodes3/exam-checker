@@ -43,6 +43,8 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
+
+      // console.log('height width: ', img.height, img.width)
     };
   }, []);
 
@@ -55,12 +57,16 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Get click position relative to canvas
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
 
-    // Draw the selected shape at the clicked position
+    const scaleX = canvas.width / rect.width; 
+    const scaleY = canvas.height / rect.height; 
+
+    const x = (event.clientX - rect.left) * scaleX;
+    const y = (event.clientY - rect.top) * scaleY;
+
+    // console.log("selected coordinates: ", x, y);
+
     drawShape(ctx, selectedShape, x, y);
     setSelectedShape(null);
   };
