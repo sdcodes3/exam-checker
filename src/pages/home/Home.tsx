@@ -22,6 +22,7 @@ const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
     | "horizontal-line"
     | "diagonal-line"
     | "rectangle"
+    | "clear"
     | null
   >(null);
   const [selectedMarks, setSelectedMarks] = useState<number | null>(null);
@@ -63,6 +64,10 @@ const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
               <MyCanvas
                 selectedShape={selectedShape}
                 setSelectedShape={setSelectedShape}
+                selectedMarks={selectedMarks}
+                setSelectedMarks={setSelectedMarks}
+                selectedQuestion={selectedQuestion}
+                setSelectedQuestion={setSelectedQuestion}
               />
             </div>
             <div className="flex lg:flex-col w-full lg:w-[10%] gap-3">
@@ -70,12 +75,14 @@ const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
                 <Toolbox
                   selectedShape={selectedShape}
                   setSelectedShape={setSelectedShape}
+                  setSelectedMarks={setSelectedMarks}
                 />
               </div>
               <div className="w-full rounded shadow-md bg-white p-2">
                 <Marks
                   selectedMarks={selectedMarks}
                   setSelectedMarks={setSelectedMarks}
+                  setSelectedShape={setSelectedShape}
                 />
               </div>
             </div>
