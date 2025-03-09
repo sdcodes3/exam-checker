@@ -1,39 +1,17 @@
-import React, { useState } from "react";
-interface QuestionInterface {
-  subQuestion: string;
-  maxMarks: number;
-  examMarks: number;
-  checked: boolean;
-}
+import React from "react";
+import { Question } from "../../types/types";
 
 interface QuestionListProps {
-  selectedQuestion: number | null;
-  setSelectedQuestion: (value: number | null) => void;
+  selectedQuestion: Question | null;
+  setSelectedQuestion: (value: Question | null) => void;
+  questions: Question[];
 }
 
 const QuestionList: React.FC<QuestionListProps> = ({
   selectedQuestion,
   setSelectedQuestion,
+  questions,
 }) => {
-  const maxMark = 10;
-  const subQuestions = ["1(a)", "1(b)", "2(a)", "2(b)", "3(a)", "3(b)"]; // Example sub-questions
-
-  // Generate mark entries
-  const [questionList, setQuestionList] = useState<QuestionInterface[]>(
-    subQuestions.map((sub, index) => ({
-      subQuestion: sub,
-      maxMarks: maxMark,
-      examMarks: index * 1.5, // Example marks (Modify as needed)
-      checked: false,
-    }))
-  );
-  const toggleCheck = (index: number) => {
-    setQuestionList((prevQuestion) =>
-      prevQuestion.map((question, i) =>
-        i === index ? { ...question, checked: !question.checked } : question
-      )
-    );
-  };
   return (
     <>
       <div className="overflow-x-auto">
@@ -49,51 +27,37 @@ const QuestionList: React.FC<QuestionListProps> = ({
               <td className="text-center font-semibold border border-gray-300 p-1 bg-gray-300">
                 Exam Marks
               </td>
-              <td className="text-center font-semibold border border-gray-300 p-1 bg-gray-300">
-                Checked
-              </td>
             </tr>
           </thead>
           <tbody>
-            {questionList.map((question, index) => (
+            {questions.map((question, index) => (
               <tr
                 key={index}
                 onClick={() => {
-                  setSelectedQuestion(index);
+                  setSelectedQuestion(question);
                 }}
                 className="cursor-pointer"
               >
                 <td
                   className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
+                    selectedQuestion?.id === question.id ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
-                  {question.subQuestion}
+                  {question.sub_question}
                 </td>
                 <td
                   className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
+                    selectedQuestion?.id === question.id ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
-                  {question.maxMarks}
+                  {question.max_marks}
                 </td>
                 <td
                   className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
+                    selectedQuestion?.id === question.id ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
-                  {question.examMarks}
-                </td>
-                <td
-                  className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
-                  } text-center border border-gray-300 text-gray-700 p-1`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={question.checked}
-                    onChange={() => toggleCheck(index)}
-                  />
+                  {question.exam_marks ? question.exam_marks : "-"}
                 </td>
               </tr>
             ))}

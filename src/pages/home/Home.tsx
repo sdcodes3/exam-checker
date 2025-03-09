@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // components import
 import Toolbox from "../../components/toolbox/Toolbox";
@@ -6,8 +6,14 @@ import Marks from "../../components/toolbox/Marks";
 import QuestionWraper from "../../components/questions/QuestionWraper";
 import PageUtility from "../../components/utility/PageUtility";
 import MyCanvas from "../../components/canvas/MyCanvas";
+import api from "../../api/api";
+import { Paper, Question } from "../../types/types";
 
-const Home: React.FC = () => {
+interface HomeProps {
+  selectedPaper: Paper;
+}
+
+const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
   const [selectedShape, setSelectedShape] = useState<
     | "checkmark"
     | "cross"
@@ -19,7 +25,35 @@ const Home: React.FC = () => {
     | null
   >(null);
   const [selectedMarks, setSelectedMarks] = useState<number | null>(null);
-  const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null
+  );
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await api.get(`/questions/paper/${selectedPaper.id}`);
+
+      const data: Question[] = response.data;
+
+      const formattedData: Question[] = data.map((item) => ({
+        id: item.id,
+        paper_id: item.paper_id,
+        exam_marks: null,
+        max_marks: item.max_marks,
+        sub_question: item.sub_question,
+      }));
+
+      setQuestions(formattedData);
+    } catch (error) {
+      console.error("Error in fetching Questions : ", error);
+    }
+  };
+  useEffect(() => {
+    fetchQuestions();
+  }, []);
+
   return (
     <>
       <div className="bg-gray-200">
@@ -50,6 +84,7 @@ const Home: React.FC = () => {
                 <QuestionWraper
                   selectedQuestion={selectedQuestion}
                   setSelectedQuestion={setSelectedQuestion}
+                  questions={questions}
                 />
               </div>
             </div>

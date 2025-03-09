@@ -1,14 +1,17 @@
 import React from "react";
 import QuestionList from "./QuestionList";
+import { Question } from "../../types/types";
 
 interface QuestionWraperProps {
-  selectedQuestion: number | null;
-  setSelectedQuestion: (value: number | null) => void;
+  selectedQuestion: Question | null;
+  setSelectedQuestion: (value: Question | null) => void;
+  questions: Question[];
 }
 
 const QuestionWraper: React.FC<QuestionWraperProps> = ({
   selectedQuestion,
   setSelectedQuestion,
+  questions,
 }) => {
   return (
     <>
@@ -20,6 +23,7 @@ const QuestionWraper: React.FC<QuestionWraperProps> = ({
         <QuestionList
           selectedQuestion={selectedQuestion}
           setSelectedQuestion={setSelectedQuestion}
+          questions={questions}
         />
       </div>
     </>
