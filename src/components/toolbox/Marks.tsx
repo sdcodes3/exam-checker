@@ -3,9 +3,21 @@ import React from "react";
 interface MarksProps {
   selectedMarks: number | null;
   setSelectedMarks: (value: number | null) => void;
+  setSelectedShape: (
+    value:
+      | "checkmark"
+      | "cross"
+      | "question"
+      | "circle"
+      | "horizontal-line"
+      | "diagonal-line"
+      | "rectangle"
+      | "clear"
+      | null
+  ) => void;
 }
 
-const Marks: React.FC<MarksProps> = ({ selectedMarks, setSelectedMarks }) => {
+const Marks: React.FC<MarksProps> = ({ selectedMarks, setSelectedMarks, setSelectedShape }) => {
   const maxMark = 10;
   const marks = [];
 
@@ -15,7 +27,9 @@ const Marks: React.FC<MarksProps> = ({ selectedMarks, setSelectedMarks }) => {
 
   const handleClick = (val: number) => {
     setSelectedMarks(val);
+    setSelectedShape("checkmark")
   };
+
   return (
     <>
       <div className="flex flex-col gap-2">

@@ -10,8 +10,10 @@ interface MyCanvasProps {
     | "horizontal-line"
     | "diagonal-line"
     | "rectangle"
+    | "clear"
     | null;
-  setSelectedShape: (
+  
+    setSelectedShape: (
     value:
       | "checkmark"
       | "cross"
@@ -20,13 +22,25 @@ interface MyCanvasProps {
       | "horizontal-line"
       | "diagonal-line"
       | "rectangle"
+      | "clear"
       | null
   ) => void;
+
+  selectedMarks: number | null;
+  setSelectedMarks: (value: number | null) => void;
+
+  selectedQuestion: string | null;
+  setSelectedQuestion: (value: string | null) => void;
+
 }
 
 const MyCanvas: React.FC<MyCanvasProps> = ({
   selectedShape,
   setSelectedShape,
+  selectedMarks,
+  setSelectedMarks,
+  selectedQuestion,
+  setSelectedQuestion
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -43,8 +57,10 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
+
+      // console.log('height width: ', img.height, img.width)
     };
-  }, []);
+  }, []); 
 
   // Function to draw the selected shape where the user clicks
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -55,13 +71,20 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Get click position relative to canvas
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
 
-    // Draw the selected shape at the clicked position
+    const scaleX = canvas.width / rect.width; 
+    const scaleY = canvas.height / rect.height; 
+
+    const x = (event.clientX - rect.left) * scaleX;
+    const y = (event.clientY - rect.top) * scaleY;
+
+    // console.log("selected coordinates: ", x, y);
+
+    
     drawShape(ctx, selectedShape, x, y);
+    console.log("clicked on canvas: ", selectedShape, selectedMarks, selectedQuestion)
+
     setSelectedShape(null);
   };
 
@@ -74,7 +97,8 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
       | "circle"
       | "horizontal-line"
       | "diagonal-line"
-      | "rectangle",
+      | "rectangle"
+      | "clear",
     x: number,
     y: number
   ) => {
@@ -90,6 +114,22 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
       ctx.lineTo(x + 15, y - 10);
       ctx.stroke();
       ctx.closePath();
+
+      // Print marks and question on the left side
+      if (selectedMarks !== null && selectedQuestion !== null) {
+        const textX = 70; // Fixed position on the left side
+        const textY = y; // Same vertical position as clicked
+
+          ctx.font = "bold 26px Arial";
+          ctx.fillStyle = "red";
+          ctx.textAlign = "center";
+          ctx.fillText(`${selectedMarks}`, textX, textY - 5); // Marks slightly above
+
+          ctx.font = "bold 20px Arial";
+          ctx.fillStyle = "red";
+          ctx.textAlign = "center";
+          ctx.fillText(`${selectedQuestion}`, textX, textY + 20); // Question slightly below
+      }
     } else if (shape === "cross") {
       // Draw a cross (✖)
       ctx.beginPath();

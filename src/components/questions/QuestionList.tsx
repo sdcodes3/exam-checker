@@ -7,8 +7,8 @@ interface QuestionInterface {
 }
 
 interface QuestionListProps {
-  selectedQuestion: number | null;
-  setSelectedQuestion: (value: number | null) => void;
+  selectedQuestion: string | null;
+  setSelectedQuestion: (value: string | null) => void;
 }
 
 const QuestionList: React.FC<QuestionListProps> = ({
@@ -59,34 +59,34 @@ const QuestionList: React.FC<QuestionListProps> = ({
               <tr
                 key={index}
                 onClick={() => {
-                  setSelectedQuestion(index);
+                  setSelectedQuestion(question.subQuestion);
                 }}
                 className="cursor-pointer"
               >
                 <td
                   className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
+                    selectedQuestion === question.subQuestion ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
                   {question.subQuestion}
                 </td>
                 <td
                   className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
+                    selectedQuestion === question.subQuestion ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
                   {question.maxMarks}
                 </td>
                 <td
                   className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
+                    selectedQuestion === question.subQuestion ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
                   {question.examMarks}
                 </td>
                 <td
                   className={`${
-                    selectedQuestion === index ? "bg-gray-200" : ""
+                    selectedQuestion === question.subQuestion ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
                   <input
