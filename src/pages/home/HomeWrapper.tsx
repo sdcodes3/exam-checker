@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../api/api";
 import Home from "./Home";
 import { Paper } from "../../types/types";
+import Loader from "../../components/loader/Loader";
 
 const HomeWrapper: React.FC = () => {
   const [selectedPaper, setSelectedPaper] = useState<Paper>({
@@ -15,19 +16,28 @@ const HomeWrapper: React.FC = () => {
 
   const [screen, setScreen] = useState<number>(0);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const fetchPaper = async () => {
+    setIsLoading(true);
     try {
       const response = await api.get("/paper");
 
       setPapers(response.data);
     } catch (error) {
       console.error("Error in fetching Paper : ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchPaper();
   }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>

@@ -12,6 +12,15 @@ const QuestionList: React.FC<QuestionListProps> = ({
   setSelectedQuestion,
   questions,
 }) => {
+  const totalMaxMarks = questions.reduce(
+    (sum, item) => sum + item.max_marks,
+    0
+  );
+  const totalExamMarks = questions.reduce(
+    (sum, item) => sum + (item.exam_marks || 0),
+    0
+  );
+
   return (
     <>
       <div className="overflow-x-auto">
@@ -61,6 +70,25 @@ const QuestionList: React.FC<QuestionListProps> = ({
                 </td>
               </tr>
             ))}
+            <tr>
+              <th
+                className={`bg-gray-100 text-center border border-gray-300 text-gray-700 p-1`}
+              >
+                Total
+              </th>
+
+              <th
+                className={`bg-gray-100 text-center border border-gray-300 text-gray-700 p-1`}
+              >
+                {totalMaxMarks}
+              </th>
+
+              <th
+                className={`bg-gray-100 text-center border border-gray-300 text-gray-700 p-1`}
+              >
+                {totalExamMarks}
+              </th>
+            </tr>
           </tbody>
         </table>
       </div>

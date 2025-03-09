@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import image from "./../../assets/one.png";
+import { Question } from "../../types/types";
 
 interface MyCanvasProps {
   selectedShape:
@@ -12,8 +13,8 @@ interface MyCanvasProps {
     | "rectangle"
     | "clear"
     | null;
-  
-    setSelectedShape: (
+
+  setSelectedShape: (
     value:
       | "checkmark"
       | "cross"
@@ -29,19 +30,26 @@ interface MyCanvasProps {
   selectedMarks: number | null;
   setSelectedMarks: (value: number | null) => void;
 
-  selectedQuestion: string | null;
-  setSelectedQuestion: (value: string | null) => void;
+  selectedQuestion: Question | null;
+  setSelectedQuestion: (value: Question | null) => void;
 
+  questions: Question[];
+  setQuestions: (value: Question[]) => void;
 }
 
 const MyCanvas: React.FC<MyCanvasProps> = ({
   selectedShape,
   setSelectedShape,
   selectedMarks,
-  selectedQuestion
+  setSelectedMarks,
+  selectedQuestion,
+  setSelectedQuestion,
+  questions,
+  setQuestions,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
+
+  const initializeCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -55,10 +63,12 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-
-      // console.log('height width: ', img.height, img.width)
     };
-  }, []); 
+  };
+
+  useEffect(() => {
+    initializeCanvas();
+  }, []);
 
   // Function to draw the selected shape where the user clicks
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -71,18 +81,23 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
 
     const rect = canvas.getBoundingClientRect();
 
-    const scaleX = canvas.width / rect.width; 
-    const scaleY = canvas.height / rect.height; 
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
 
     const x = (event.clientX - rect.left) * scaleX;
     const y = (event.clientY - rect.top) * scaleY;
 
-    // console.log("selected coordinates: ", x, y);
-
-    
     drawShape(ctx, selectedShape, x, y);
-    console.log("clicked on canvas: ", selectedShape, selectedMarks, selectedQuestion)
-
+    if (selectedMarks !== null) {
+      const updatedQuestions = questions.map((item) =>
+        item.id === selectedQuestion?.id
+          ? { ...item, exam_marks: selectedMarks }
+          : item
+      );
+      setQuestions(updatedQuestions);
+      setSelectedQuestion(null);
+    }
+    setSelectedMarks(null);
     setSelectedShape(null);
   };
 
@@ -118,15 +133,15 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
         const textX = 70; // Fixed position on the left side
         const textY = y; // Same vertical position as clicked
 
-          ctx.font = "bold 26px Arial";
-          ctx.fillStyle = "red";
-          ctx.textAlign = "center";
-          ctx.fillText(`${selectedMarks}`, textX, textY - 5); // Marks slightly above
+        ctx.font = "bold 26px Arial";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText(`${selectedMarks}`, textX, textY - 5); // Marks slightly above
 
-          ctx.font = "bold 20px Arial";
-          ctx.fillStyle = "red";
-          ctx.textAlign = "center";
-          ctx.fillText(`${selectedQuestion}`, textX, textY + 20); // Question slightly below
+        ctx.font = "bold 20px Arial";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText(`${selectedQuestion.sub_question}`, textX, textY + 20); // Question slightly below
       }
     } else if (shape === "cross") {
       // Draw a cross (✖)
@@ -166,6 +181,8 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
     } else if (shape === "rectangle") {
       // Draw a rectangle (▭)
       ctx.strokeRect(x - 15, y - 10, 30, 20);
+    } else if (shape === "clear") {
+      initializeCanvas();
     }
   };
   const saveCanvas = () => {

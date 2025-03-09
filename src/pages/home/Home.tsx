@@ -8,6 +8,7 @@ import PageUtility from "../../components/utility/PageUtility";
 import MyCanvas from "../../components/canvas/MyCanvas";
 import api from "../../api/api";
 import { Paper, Question } from "../../types/types";
+import Loader from "../../components/loader/Loader";
 
 interface HomeProps {
   selectedPaper: Paper;
@@ -32,7 +33,10 @@ const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
 
   const [questions, setQuestions] = useState<Question[]>([]);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const fetchQuestions = async () => {
+    setIsLoading(true);
     try {
       const response = await api.get(`/questions/paper/${selectedPaper.id}`);
 
@@ -49,11 +53,17 @@ const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
       setQuestions(formattedData);
     } catch (error) {
       console.error("Error in fetching Questions : ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     fetchQuestions();
   }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -68,6 +78,8 @@ const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
                 setSelectedMarks={setSelectedMarks}
                 selectedQuestion={selectedQuestion}
                 setSelectedQuestion={setSelectedQuestion}
+                questions={questions}
+                setQuestions={setQuestions}
               />
             </div>
             <div className="flex lg:flex-col w-full lg:w-[10%] gap-3">
@@ -83,6 +95,7 @@ const Home: React.FC<HomeProps> = ({ selectedPaper }) => {
                   selectedMarks={selectedMarks}
                   setSelectedMarks={setSelectedMarks}
                   setSelectedShape={setSelectedShape}
+                  selectedQuestion={selectedQuestion}
                 />
               </div>
             </div>
