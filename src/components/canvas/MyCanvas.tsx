@@ -130,18 +130,18 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
       ctx.strokeRect(x - 15, y - 10, 30, 20);
     }
   };
-  // const saveCanvas = () => {
-  //   const canvas = canvasRef.current;
-  //   if (!canvas) return;
+  const saveCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  //   const imageURI = canvas.toDataURL("image/png"); // Convert canvas to PNG image
+    const imageURI = canvas.toDataURL("image/png"); // Convert canvas to PNG image
 
-  //   // Create a link to download the image
-  //   const link = document.createElement("a");
-  //   link.href = imageURI;
-  //   link.download = "canvas-drawing.png";
-  //   link.click();
-  // };
+    // Create a link to download the image
+    const link = document.createElement("a");
+    link.href = imageURI;
+    link.download = "canvas-drawing.png";
+    link.click();
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -153,12 +153,12 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
       />
 
       {/* Save Button */}
-      {/* <button
+      <button
         onClick={saveCanvas}
         className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-md shadow-md"
       >
         Save Image
-      </button> */}
+      </button>
     </div>
   );
 };
