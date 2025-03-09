@@ -38,9 +38,7 @@ const MyCanvas: React.FC<MyCanvasProps> = ({
   selectedShape,
   setSelectedShape,
   selectedMarks,
-  setSelectedMarks,
-  selectedQuestion,
-  setSelectedQuestion
+  selectedQuestion
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
