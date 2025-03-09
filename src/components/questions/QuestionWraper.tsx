@@ -2,8 +2,8 @@ import React from "react";
 import QuestionList from "./QuestionList";
 
 interface QuestionWraperProps {
-  selectedQuestion: number | null;
-  setSelectedQuestion: (value: number | null) => void;
+  selectedQuestion: string | null;
+  setSelectedQuestion: (value: string | null) => void;
 }
 
 const QuestionWraper: React.FC<QuestionWraperProps> = ({

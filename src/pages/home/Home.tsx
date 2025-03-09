@@ -16,10 +16,13 @@ const Home: React.FC = () => {
     | "horizontal-line"
     | "diagonal-line"
     | "rectangle"
+    | "clear"
     | null
   >(null);
   const [selectedMarks, setSelectedMarks] = useState<number | null>(null);
-  const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
+
+  // console.log("home page: ", selectedShape, selectedMarks, selectedQuestion)
   return (
     <>
       <div className="bg-gray-200">
@@ -29,6 +32,12 @@ const Home: React.FC = () => {
               <MyCanvas
                 selectedShape={selectedShape}
                 setSelectedShape={setSelectedShape}
+                
+                selectedMarks={selectedMarks}
+                setSelectedMarks={setSelectedMarks}
+                
+                selectedQuestion={selectedQuestion}
+                setSelectedQuestion={setSelectedQuestion}
               />
               {/* <img src={page} alt="paper page" className="w-full" /> */}
             </div>
@@ -37,12 +46,16 @@ const Home: React.FC = () => {
                 <Toolbox
                   selectedShape={selectedShape}
                   setSelectedShape={setSelectedShape}
+
+                  setSelectedMarks={setSelectedMarks}
                 />
               </div>
               <div className="w-full rounded shadow-md bg-white p-2">
                 <Marks
                   selectedMarks={selectedMarks}
                   setSelectedMarks={setSelectedMarks}
+
+                  setSelectedShape={setSelectedShape}
                 />
               </div>
             </div>

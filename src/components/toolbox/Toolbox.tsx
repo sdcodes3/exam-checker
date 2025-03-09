@@ -19,6 +19,7 @@ interface ToolboxProps {
     | "horizontal-line"
     | "diagonal-line"
     | "rectangle"
+    | "clear"
     | null;
   setSelectedShape: (
     value:
@@ -29,13 +30,17 @@ interface ToolboxProps {
       | "horizontal-line"
       | "diagonal-line"
       | "rectangle"
+      | "clear"
       | null
   ) => void;
+  
+  setSelectedMarks: (value: number | null) => void;
 }
 
 const Toolbox: React.FC<ToolboxProps> = ({
   selectedShape,
   setSelectedShape,
+  setSelectedMarks,
 }) => {
   const handleClick = (
     val:
@@ -46,9 +51,11 @@ const Toolbox: React.FC<ToolboxProps> = ({
       | "horizontal-line"
       | "diagonal-line"
       | "rectangle"
+      | "clear"
       | null
   ) => {
     setSelectedShape(val);
+    setSelectedMarks(null);
   };
   const data: {
     id:
@@ -59,6 +66,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
       | "horizontal-line"
       | "diagonal-line"
       | "rectangle"
+      | "clear"
       | null;
     symbol: any;
   }[] = [
@@ -91,7 +99,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
       symbol: <Square className="size-4" />,
     },
     {
-      id: null,
+      id: "clear",
       symbol: <Eraser className="size-4" />,
     },
   ];
