@@ -3,8 +3,11 @@ import api from "../../api/api";
 import Home from "./Home";
 import { Paper } from "../../types/types";
 import Loader from "../../components/loader/Loader";
+import { useNavigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 const HomeWrapper: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedPaper, setSelectedPaper] = useState<Paper>({
     id: "",
     paper_name: "",
@@ -18,10 +21,16 @@ const HomeWrapper: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  if (!localStorage.getItem("id")) {
+    navigate("/login");
+  }
+
+  const userId = localStorage.getItem("id");
+
   const fetchPaper = async () => {
     setIsLoading(true);
     try {
-      const response = await api.get("/paper");
+      const response = await api.get(`/paper/faculty/${userId}`);
 
       setPapers(response.data);
     } catch (error) {
@@ -41,6 +50,7 @@ const HomeWrapper: React.FC = () => {
 
   return (
     <>
+      <Toaster />
       {screen === 0 ? (
         <div className="overflow-x-auto p-4">
           <div className="text-center text-lg font-semibold py-4">

@@ -66,7 +66,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
                     selectedQuestion?.id === question.id ? "bg-gray-200" : ""
                   } text-center border border-gray-300 text-gray-700 p-1`}
                 >
-                  {question.exam_marks ? question.exam_marks : "-"}
+                  {question.exam_marks !== null ? question.exam_marks : "-"}
                 </td>
               </tr>
             ))}
